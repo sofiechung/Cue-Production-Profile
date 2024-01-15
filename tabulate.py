@@ -39,28 +39,28 @@ def productions(target,phoneme_objects):
             output.append(ph.production)
     return output
 
-def tabulate(phonemes, filtered_contexts):
-    tabulations = {}
-    for c in filtered_contexts:
-        if c not in set(tabulations.keys()):
-            tabulations[c] = {'count':1}
-        else:
-            tabulations[c]['count'] += 1
-    for phoneme in phonemes:
-        if phoneme.gen_context in set(tabulations.keys()):
-            for realLM in phoneme.realLM:
-                if realLM[0] not in set(tabulations[phoneme.gen_context].keys()): 
-                    tabulations[phoneme.gen_context][realLM[0]] = 1
-                else:
-                    tabulations[phoneme.gen_context][realLM[0]] += 1
-            labels = phoneme.get_labels()
+# def tabulate(phonemes, filtered_contexts):
+#     tabulations = {}
+#     for c in filtered_contexts:
+#         if c not in set(tabulations.keys()):
+#             tabulations[c] = {'count':1}
+#         else:
+#             tabulations[c]['count'] += 1
+#     for phoneme in phonemes:
+#         if phoneme.gen_context in set(tabulations.keys()):
+#             for realLM in phoneme.realLM:
+#                 if realLM[0] not in set(tabulations[phoneme.gen_context].keys()): 
+#                     tabulations[phoneme.gen_context][realLM[0]] = 1
+#                 else:
+#                     tabulations[phoneme.gen_context][realLM[0]] += 1
+#             labels = phoneme.get_labels()
         
-            for label in labels:
-                if label not in set(tabulations[phoneme.gen_context].keys()):
-                    tabulations[phoneme.gen_context][label] = 1
-                else:
-                    tabulations[phoneme.gen_context][label] += 1
-    return tabulations
+#             for label in labels:
+#                 if label not in set(tabulations[phoneme.gen_context].keys()):
+#                     tabulations[phoneme.gen_context][label] = 1
+#                 else:
+#                     tabulations[phoneme.gen_context][label] += 1
+#     return tabulations
 
 def tabulate_v1(phonemes, filtered_contexts):
     tabulations = {}
@@ -176,71 +176,9 @@ def runv1(all_textgrid_paths):
     df = pd.DataFrame(data, index = rows, columns = columns)
     return df
 
-    
-
-
-# def run(all_textgrid_paths):
-#     tabulations = []
-#     output = ""
-
-#     for textgrid_path in all_textgrid_paths:
-#         print("Currently tabulating: " + textgrid_path)
-#         output += "\n" + textgrid_path + "\n"
-#         textgrid = textgrids.TextGrid(textgrid_path)
-#         phonemes = speech_ds.make_phonemes(textgrid)
-#         words = speech_ds.make_words(textgrid, None, phonemes)
-#         phrase = speech_ds.make_phrase(textgrid, None, words)
-#         contexts = []
-     
-#         for phoneme in phonemes:
-#             contexts.append(phoneme.gen_context)
-#         filtered = context_filter('t',contexts)
-#         textgrid_tabulation = tabulate_v1(phonemes, filtered)
-#         # print(textgrid_tabulation)
-#         tabulations.append(textgrid_tabulation)
-
-#     final_tabulations = combine_all_tabulations_v1(tabulations)
-    
-#     return final_tabulations, output
-
-
-# def run(lexi,tobi):
-#     """
-#     params: lexi- LEXI TextGrid after alignment algorithm has been run
-#             tobi- ToBI TextGrid
-#     relies on christine's algorithm being correct
-#     """
-#     phonemes = speech_ds.make_phonemes(lexi)
-#     words = speech_ds.make_words(lexi, tobi, phonemes)
-#     phrase = speech_ds.make_phrase(lexi, tobi, words)
-#     contexts = []
-#     for phoneme in phonemes:
-#         contexts.append(phoneme.gen_context)
-#     filtered = context_filter('b',contexts)
-#     tabulations = tabulate(phonemes, filtered)
-#     print(tabulations)
 
 if __name__ == '__main__':
-    # all_textgrids = get_all_textgrids_from_directory('/Users/sofiechung/SuperUROP/BettyBought/BettyBought_choi_edits_2-24-23_alig.TextGrid')
-    paths = ["/Users/sofiechung/SuperUROP/todo/DR1/FCJF0",
-             "/Users/sofiechung/SuperUROP/todo/DR1/MCPM0",
-             "/Users/sofiechung/SuperUROP/todo/DR2/FAEM0",
-             "/Users/sofiechung/SuperUROP/todo/DR2/MARC0",
-             "/Users/sofiechung/SuperUROP/todo/DR3/FALK0",
-             "/Users/sofiechung/SuperUROP/todo/DR3/MADC0",
-             "/Users/sofiechung/SuperUROP/todo/DR4/FALR0",
-             "/Users/sofiechung/SuperUROP/todo/DR4/MAEB0",
-             "/Users/sofiechung/SuperUROP/todo/DR5/FBJL0",
-             "/Users/sofiechung/SuperUROP/todo/DR5/MGBT0",
-             "/Users/sofiechung/SuperUROP/todo/DR6/FAPB0",
-             "/Users/sofiechung/SuperUROP/todo/DR6/MABC0",
-             "/Users/sofiechung/SuperUROP/todo/DR7/FBLV0",
-             "/Users/sofiechung/SuperUROP/todo/DR7/MADD0",
-             "/Users/sofiechung/SuperUROP/todo/DR8/FBCG1",
-             "/Users/sofiechung/SuperUROP/todo/DR8/MBCG0"]
- 
-    # path_to_directory = input("What is the path to your directory: ")
-
+    path_to_directory = input("What is the path to your directory: ")
     # all_textgrid_paths = get_all_textgrids_from_directory(path_to_directory)
     all_textgrid_paths = []
     for p in paths:
@@ -250,61 +188,12 @@ if __name__ == '__main__':
 
 
 
-    # while not all_textgrid_paths:
-    #     print("There are no textgrid files here. Did you mistype the path?")
-    #     path_to_directory = input("What is the path to your directory: ")
-    #     all_textgrid_paths = get_all_textgrids_from_directory(path_to_directory)
+    while not all_textgrid_paths:
+        print("There are no textgrid files here. Did you mistype the path?")
+        path_to_directory = input("What is the path to your directory: ")
+        all_textgrid_paths = get_all_textgrids_from_directory(path_to_directory)
 
     # final_tabulations, output = run(all_textgrid_paths)
     
     final = runv1(all_textgrid_paths)
-    # final_excel = final.to_excel("contexts.xlsx")  
-
-    # print(final)
-    # speakers = []
-    # index = list(final.index)
-    # temp = index[0][4:9]
-    # unique_speakers = set()
-    # for speaker in index:
-    #     unique_speakers.add(speaker[4:9])
-    
-    # temp = []
-    # for speaker in unique_speakers:
-    #     temp 
-
-    # speakers =  []
-    # # print(final.index)
-    # index = list(final.index)
-    # temp = index[0][4:9]
-    # speaker_subset = set()
-    # for speaker in index:
-    #         if speaker[4:9] == temp:
-    #             speaker_subset.add(speaker)
-    #         else:
-    #             speakers.append(list(speaker_subset))
-    #             speaker_subset = set()
-    #             temp = speaker[4:9]
-    #             speaker_subset.add(speaker)
-    # speakers.append(list(speaker_subset))
-
-    # print(speakers, len(speakers))
-    # for speaker in speakers:
-    #     for sentence in speaker:
-    #         final.loc[speaker[4:9], 'label' == 'flapping'].sum()
-
-
-    # for speaker in speakers:
-    #     temp = []
-    #     df
-    #     df.loc[df['a'] == 1, 'b'].sum()
-        
-    
-            # df.loc[df['a'] == 1, 'b'].sum()
-
-    # print(final_tabulations)
-    # output_file_name = path_to_directory.split('/')[-1] + "_output.txt"
-    # output_file = open(output_file_name, 'w+')
-    # output_file.write(output)
-    # output_file.write("\nSummary\n")
-    # output_file.write(str(final_tabulations))
-    # output_file.close()
+    final_excel = final.to_excel("contexts.xlsx")  
